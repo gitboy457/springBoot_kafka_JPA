@@ -1,0 +1,11 @@
+url:-http://localhost:9000/kafka/publish/person
+request:-
+{
+	"firstName":"anil",
+	"lastName":"gupta",
+	"age":"24",
+	"mobile":"6575467658",
+	"email":"anil@gmail.com"
+}
+
+response:- 200

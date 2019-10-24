@@ -5,22 +5,10 @@ import org.springframework.stereotype.Component;
 import com.ace.entity.Person;
 import com.ace.entity.PersonPayload;
 import com.ace.entity.UpdateMobilePayload;
-import com.ace.dto.request.PersonRequest;
 import com.ace.dto.request.UpdateMobileRequest;
 
 @Component
 public class PersonWrapper {
-
-	public Person fromPersonRequest(PersonRequest request) {
-		Person p = new Person();
-
-		p.setFirstName(request.getFirstName());
-		p.setLastName(request.getLastName());
-		p.setMobile(request.getMobile());
-		p.setEmail(request.getEmail());
-		p.setAge(request.getAge());
-		return p;
-	}
 
 	public Person fromPersonPayload(PersonPayload personPayload) {
 		Person p = new Person();

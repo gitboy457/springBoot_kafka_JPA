@@ -1,51 +1,47 @@
 package com.ace.service;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.MessageHeaders;
+import org.springframework.messaging.support.MessageBuilder;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
+import org.springframework.util.MimeTypeUtils;
 
+import com.ace.PersonStreams;
 import com.ace.Repository.PersonRepository;
-import com.ace.entity.Person;
-import com.ace.dto.request.PersonRequest;
-import com.ace.dto.request.UpdateMobileRequest;
+import com.ace.entity.PersonPayload;
+import com.ace.entity.UpdateMobilePayload;
 import com.ace.wrapper.PersonWrapper;
-
-@Service
-public class PersonServiceImpl implements PersonService {
-
-	@Autowired
-	private PersonRepository personRepository;
-
-	@Autowired
-	private PersonRepository personRepositor;
+@Component
+public class PersonServiceImpl implements PersonService{
 	
-	@Autowired
-	private PersonWrapper personWrapper;
-  //insert new record
-	@Override
-	public ResponseEntity<Object> savePerson(PersonRequest request) {
-		Person p = personWrapper.fromPersonRequest(request);
-		personRepository.save(p);
-		return new ResponseEntity<Object>(HttpStatus.OK);
-	}
+	
+	private final PersonStreams personStreams;
 
-	//get all
-	@Override
-	public ResponseEntity<Object> getPersons() {
-		List<Person> persons = personRepository.getAllPerson();
-		return new ResponseEntity<Object>(persons, HttpStatus.OK);
+	public PersonServiceImpl(PersonStreams personStreams) {
+		super();
+		this.personStreams = personStreams;
 	}
-
-	//update mobile
+	
+	
+	//Producer of new person record
 	@Override
-	public ResponseEntity<Object> updatePersonMobile(UpdateMobileRequest request) {
-		
-		personRepository.updateMobile(request.getPersonId(),request.getMobile());
-		return new ResponseEntity<Object>( HttpStatus.OK);
+	public void publishNewPersonRecord(final PersonPayload personPayload) {
+		MessageChannel messageChannel =    personStreams.outboundPerson();
+		messageChannel.send(MessageBuilder
+                .withPayload(personPayload)
+                .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+                .build());
 	}
+	
+	//Producer of update person record
+	@Override
+		public void publishUpdateMobileRecord(final UpdateMobilePayload personPayload) {
+			MessageChannel messageChannel =    personStreams.outboundPersonUpdate();
+			messageChannel.send(MessageBuilder
+	                .withPayload(personPayload)
+	                .setHeader(MessageHeaders.CONTENT_TYPE, MimeTypeUtils.APPLICATION_JSON)
+	                .build());
+		}
 
 }

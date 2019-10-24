@@ -11,20 +11,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ace.PersonService;
 import com.ace.dto.request.UpdateMobileRequest;
 import com.ace.entity.PersonPayload;
 import com.ace.entity.UpdateMobilePayload;
+import com.ace.service.PersonServiceImpl;
 
 @RestController
 @RequestMapping(value = "/kafka")
 public class KafkaController {
 
 
-private final PersonService personService;
+private final PersonServiceImpl personService;
 
 @Autowired
-public KafkaController(PersonService personService) {
+public KafkaController(PersonServiceImpl personService) {
 this.personService=personService;
 }
 	
