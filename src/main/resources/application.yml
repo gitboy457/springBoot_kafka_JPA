@@ -1,0 +1,44 @@
+
+
+server:
+  port: 9000
+    
+spring:
+  cloud:
+    stream:
+      kafka:
+        binder:
+          brokers: localhost:9092
+      bindings:
+        person-in:
+ # which we are going to send our payload to this Topic     
+          destination: new.person
+          contentType: application/json
+        person-out:
+# which we are going to consume payload form this topic 
+          destination: new.person
+          contentType: application/json
+  
+        personUpdate-in:
+ # which we are going to send our payload to this Topic     
+          destination: update.person
+          contentType: application/json
+        personUpdate-out:
+# which we are going to consume payload form this topic 
+          destination: update.person
+          contentType: application/json
+          
+          
+# Database configuration
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop
+  datasource:
+    url: jdbc:mysql://localhost:3306/batchdemo
+    username: root
+    password: root
+    driverClassName: com.mysql.cj.jdbc.Driver
+          
+
+
